@@ -32,6 +32,7 @@ body
     background color-background
     // include two shadows with a solid color, to create the effect of having another card lying below the existing one
     box-shadow 6px 8px 0 color-text, 14px 14px 0 color-background
+    position relative
 
     h1#title
         font-size 2rem
@@ -63,7 +64,16 @@ body
         /* transition to smoothen the change in opacity  */
         transition opacity 0.2s ease-out
 
-    // styles for the SVG and the rectangle elements
+    // style the rectangle elements of the visualization 
+    svg g .tile
+        opacity 0.7
+        stroke rgba(color-text, 0.3)
+        stroke-width 0.5px
+        // transition for a small change in opacity
+        transition all 0.25s ease-out
+
+        &:hover
+            opacity 1
 
 
 // for smaller viewports reduce the font-size of the text elements

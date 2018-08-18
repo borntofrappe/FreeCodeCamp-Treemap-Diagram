@@ -1,4 +1,4 @@
-<!-- Link to the work-in-progress pen right [here](). -->
+Link to the working pen right [here](https://codepen.io/borntofrappe/full/RYbaOo/).
 
 ## Preface
 
@@ -36,25 +36,25 @@ To complete the project at hand, D3.js provides the `d3.treemap()` function, whi
 
 - [x] there exist a description with `id="description"`;
 
-- [ ] there exist `rect` element with `class="tile"`;
+- [x] there exist `rect` element with `class="tile"`;
 
-- [ ] the tiles should at least have 2 different fill colors;
+- [x] the tiles should at least have 2 different fill colors;
 
-- [ ] each tile has the following data attributes: `data-name`, `data-category`, and `data-value`. These should contain the information found under the labels bearing the same name in the JSON file;
+- [x] each tile has the following data attributes: `data-name`, `data-category`, and `data-value`. These should contain the information found under the labels bearing the same name in the JSON file;
 
-- [ ] the area of each tile should match the `data-value`, with increasing values matched by bigger areas;
+- [x] the area of each tile should match the `data-value`, with increasing values matched by bigger areas;
 
-- [ ] there exist a legend with `id="legend"`;
+- [x] there exist a legend with `id="legend"`;
 
-- [ ] the legend needs `rect` elements with `class="legend-item"`;
+- [x] the legend needs `rect` elements with `class="legend-item"`;
 
-- [ ] the legend should at least make use of 2 different fill colors;
+- [x] the legend should at least make use of 2 different fill colors;
 
-- [ ] when hovering on each area, a tooltip with `id="tooltip"` is to be displayed with detailed information;
+- [x] when hovering on each area, a tooltip with `id="tooltip"` is to be displayed with detailed information;
 
-- [ ] the tooltip should have a `data-value` property matching the attribute of the rectangle elements.
+- [x] the tooltip should have a `data-value` property matching the attribute of the rectangle elements.
 
-This while benefiting from one of three datasets, from which I picked the following describing [Movie Sales]():
+This while benefiting from one of three datasets, from which I picked the following describing [Movie Sales](https://cdn.rawgit.com/freeCodeCamp/testable-projects-fcc/a80ce8f9/src/data/tree_map/movie-data.json):
 
 ```code
 https://cdn.rawgit.com/freeCodeCamp/testable-projects-fcc/a80ce8f9/src/data/tree_map/movie-data.json
@@ -108,4 +108,85 @@ In pseudo code, and considering a small subset of the JSON format, you can visua
 }
 ```
 
+The key values seem to be under:
 
+- JSON.children[i].name, for the movie category;
+
+- JSON.children[i].children[i].name for the name of the movie;
+
+- JSON.children[i].children[i].value for the sales metric.
+
+That being said, the JSON format might be subject to changes, once the mentioned `d3.treemap()` function is included.
+
+### D3
+
+Considering how the mentioned `d3.treemap()` function could work similarly to `d3.pie()`, a quick test is done by displaying the output of the function, when including the JSON format as parameter.
+
+As this comparison proved to be wrong, and I struggled a little more to include the treemap layout, I'll try to explain the process as clearly as possible for posterity's sake.
+
+Starting with a bit of set up, the JSON object is retrieved with a call through **fetch** API. THe object is then passed as argument to a function responsible for the data visualization itself.
+
+```JS
+// retrieve the JSON format and pass it in a function responsible to draw the diagram itself
+const URL = "https://cdn.rawgit.com/freeCodeCamp/testable-projects-fcc/a80ce8f9/src/data/tree_map/movie-data.json";
+
+
+fetch(URL)
+  .then((response) => response.json())
+  .then((json) => drawDiagram(json));
+
+function drawDiagram(data) {
+  // log the JSON file
+  console.log(data);
+}
+```
+
+With the available JSON format, and as mentioned earlier, passing the data in the mapping function proves to be wrong: 
+
+```JS
+function drawDiagram(data) {
+  // log the JSON file
+  // console.log(data);
+
+  let treemap = d3.treemap();
+  console.log(treemap(data));
+}
+```
+
+> Uncaught (in promise) TypeError: t.eachBefore is not a function
+
+Beside the cryptic error message, is the [documentation](https://github.com/d3/d3-hierarchy/blob/master/README.md#treemap) of the library itself which comes to help:
+
+> You must call root.sum before passing the hierarchy to the treemap layout
+
+With a bit of research, on the newly pronounced hierarchy and root.sum, this is what I managed to reason: 
+
+- the `d3.treemap()` function provides the values used in the SVG to draw the rectangle elements. These values specify the left, top, right, bottom edges of the rectangle elements, in `node.x0`, `node.y0`, `node.x1`, `node.y1`;
+
+- the values for the edges are based on a value, which is itself based on the values of the data points for the single objects and the values of the cumulative data points for the branches. These values are computed with the `sum()` function, as follows:
+
+  ```JS
+  root.sum((d) => d.value); // where d.value holds the value making up the branches
+  ```
+
+- the `sum()` function is called on a root element. This element is obtained through the `d3.hierarchy()` function, which accepts as argument the JSON file itself.
+
+  ```JS
+  let hierarchy = d3.hierarchy(json);
+  hierarchy.sum((d) => d.value);
+  ```
+
+While understandable, this first rough version of the code is certainly a lesson in thoroughly reading the documentation.
+
+```JS
+  let hierarchy = d3.hierarchy(data);
+  
+  hierarchy.sum((d) => d.value);
+
+  const treemap = d3.treemap();
+  
+  // display the data, as modified per the treemap layout 
+  console.log(treemap(hierarchy));
+```
+
+<!-- TODO: document how the rectangle elements were inclued, as well as the color scale (such a neat scale) -->
