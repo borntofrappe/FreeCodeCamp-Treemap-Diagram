@@ -32,9 +32,9 @@ To complete the project at hand, D3.js provides the `d3.treemap()` function, whi
 
 @freeCodeCamp describes a set of user stories the project must fulfill to complete the task. For the projet at hand, these are:
 
-- [ ] there exist a title with `id="title"`;
+- [x] there exist a title with `id="title"`;
 
-- [ ] there exist a description with `id="description"`;
+- [x] there exist a description with `id="description"`;
 
 - [ ] there exist `rect` element with `class="tile"`;
 
