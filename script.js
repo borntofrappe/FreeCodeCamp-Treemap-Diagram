@@ -17,6 +17,10 @@ const tooltip = container
   .append("div")
   .attr("id", "tooltip");
 
+tooltip
+  .append("p")
+  .attr("class", "name");
+
 // for the SVG, define an object with the margins, used to nest the SVG content safe inside the SVG boundaries
 // as there is no need for axis, the margin is used to safely draw the legend and the overall visualization
 const margin = {
@@ -89,9 +93,20 @@ function drawDiagram(data) {
     .data(movies)
     .enter()
     .append("rect")
+    .attr("class", "tile")
     .attr("data-name", (d, i) => d.data.name)
     .attr("data-category", (d, i) => d.data.category)
     .attr("data-value", (d, i) => d.data.value)
+    .on("mouseenter", (d, i) => {
+      tooltip
+        .style("opacity", 1)
+        .style("left", `${d3.event.layerX + 5}px`)
+        .style("top", `${d3.event.layerY + 5}px`);
+      tooltip
+        .select("p.name")
+        .text(() => d.data.name);
+    })
+    .on("mouseout", () => tooltip.style("opacity", 0))
     .attr("width", (d, i) => (d.x1 - d.x0) * width)
     .attr("height", (d, i) => (d.y1 - d.y0) * height)
     .attr("x", (d, i) => d.x0 * width)
