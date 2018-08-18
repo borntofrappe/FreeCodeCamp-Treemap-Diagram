@@ -38,6 +38,8 @@ const svgCanvas = svgContainer
   .append("g")
   .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
+const colorScale = d3
+  .scaleOrdinal(d3.schemeSet2);
 
 // retrieve the JSON format and pass it in a function responsible to draw the diagram itself
 const URL = "https://cdn.rawgit.com/freeCodeCamp/testable-projects-fcc/a80ce8f9/src/data/tree_map/movie-data.json";
@@ -64,9 +66,36 @@ function drawDiagram(data) {
   hierarchy.sum((d) => d.value);
 
   // create a treemap layout
-  let treemap = d3.treemap();
+  const treemap = d3.treemap();
+
+  const treemapLayout = treemap(hierarchy);
   
   // display the data, as modified per the treemap layout 
-  console.log(treemap(hierarchy));
+  // console.log(treemapLayout);
+
+
+  let movies = [];
+  for(let i = 0; i < treemapLayout.children.length; i++) {
+    // console.log(treemapLayout.children[i]);
+    for(let j = 0; j < treemapLayout.children[i].children.length; j++) {
+      // console.log(treemapLayout.children[i].children[j]);
+      movies.push(treemapLayout.children[i].children[j]);
+    }
+  }
+  console.log(movies);
+
+  svgCanvas
+    .selectAll("rect")
+    .data(movies)
+    .enter()
+    .append("rect")
+    .attr("data-name", (d, i) => d.data.name)
+    .attr("data-category", (d, i) => d.data.category)
+    .attr("data-value", (d, i) => d.data.value)
+    .attr("width", (d, i) => (d.x1 - d.x0) * width)
+    .attr("height", (d, i) => (d.y1 - d.y0) * height)
+    .attr("x", (d, i) => d.x0 * width)
+    .attr("y", (d, i) => d.y0 * height)
+    .attr("fill", (d, i) => colorScale(d.data.category));
 
 }
