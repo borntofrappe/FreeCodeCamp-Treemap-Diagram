@@ -1,4 +1,4 @@
-<!-- Link to the work-in-progress pen right [here](). -->
+Link to the working pen right [here](https://codepen.io/borntofrappe/full/RYbaOo/).
 
 ## Preface
 
@@ -188,3 +188,5 @@ While understandable, this first rough version of the code is certainly a lesson
   // display the data, as modified per the treemap layout 
   console.log(treemap(hierarchy));
 ```
+
+<!-- TODO: document how the rectangle elements were inclued, as well as the color scale (such a neat scale) -->
