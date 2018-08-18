@@ -86,7 +86,6 @@ function drawDiagram(data) {
       movies.push(treemapLayout.children[i].children[j]);
     }
   }
-  console.log(movies);
 
   svgCanvas
     .selectAll("rect")
@@ -100,6 +99,7 @@ function drawDiagram(data) {
     .on("mouseenter", (d, i) => {
       tooltip
         .style("opacity", 1)
+        .attr("data-value", () => d.date.value)
         .style("left", `${d3.event.layerX + 5}px`)
         .style("top", `${d3.event.layerY + 5}px`);
       tooltip
@@ -112,5 +112,4 @@ function drawDiagram(data) {
     .attr("x", (d, i) => d.x0 * width)
     .attr("y", (d, i) => d.y0 * height)
     .attr("fill", (d, i) => colorScale(d.data.category));
-
 }

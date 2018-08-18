@@ -36,13 +36,13 @@ To complete the project at hand, D3.js provides the `d3.treemap()` function, whi
 
 - [x] there exist a description with `id="description"`;
 
-- [ ] there exist `rect` element with `class="tile"`;
+- [x] there exist `rect` element with `class="tile"`;
 
-- [ ] the tiles should at least have 2 different fill colors;
+- [x] the tiles should at least have 2 different fill colors;
 
-- [ ] each tile has the following data attributes: `data-name`, `data-category`, and `data-value`. These should contain the information found under the labels bearing the same name in the JSON file;
+- [x] each tile has the following data attributes: `data-name`, `data-category`, and `data-value`. These should contain the information found under the labels bearing the same name in the JSON file;
 
-- [ ] the area of each tile should match the `data-value`, with increasing values matched by bigger areas;
+- [x] the area of each tile should match the `data-value`, with increasing values matched by bigger areas;
 
 - [ ] there exist a legend with `id="legend"`;
 
@@ -50,11 +50,11 @@ To complete the project at hand, D3.js provides the `d3.treemap()` function, whi
 
 - [ ] the legend should at least make use of 2 different fill colors;
 
-- [ ] when hovering on each area, a tooltip with `id="tooltip"` is to be displayed with detailed information;
+- [x] when hovering on each area, a tooltip with `id="tooltip"` is to be displayed with detailed information;
 
-- [ ] the tooltip should have a `data-value` property matching the attribute of the rectangle elements.
+- [x] the tooltip should have a `data-value` property matching the attribute of the rectangle elements.
 
-This while benefiting from one of three datasets, from which I picked the following describing [Movie Sales]():
+This while benefiting from one of three datasets, from which I picked the following describing [Movie Sales](https://cdn.rawgit.com/freeCodeCamp/testable-projects-fcc/a80ce8f9/src/data/tree_map/movie-data.json):
 
 ```code
 https://cdn.rawgit.com/freeCodeCamp/testable-projects-fcc/a80ce8f9/src/data/tree_map/movie-data.json
