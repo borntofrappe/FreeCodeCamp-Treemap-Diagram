@@ -51,9 +51,9 @@ const legend = svgContainer
 
 // include the array with the legends values
 const moviesCategories = ["Action", "Drama", "Adventure", "Family", "Animation", "Comedy", "Biography"];
-// include one rectangle per legend value, with a different fill color
 
 legend
+  // include one rectangle per legend value, with a different fill color
   .selectAll("rect")
   .data(moviesCategories)
   .enter()
@@ -63,10 +63,13 @@ legend
   .attr("height", 20)
   .attr("x", (d, i) => i*50)
   .attr("y", 0)
+  // fill to match the fill color of the tiles
   .attr("fill", (d, i) => colorScale(d))
+  // opacity to match the default opacity for the same rectangles
   .attr("opacity", 0.7);
 
 legend
+  // below each legend item, include a text detailing the movie category
   .selectAll("text")
   .data(moviesCategories)
   .enter()
