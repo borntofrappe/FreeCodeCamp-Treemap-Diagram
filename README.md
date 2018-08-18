@@ -44,11 +44,11 @@ To complete the project at hand, D3.js provides the `d3.treemap()` function, whi
 
 - [x] the area of each tile should match the `data-value`, with increasing values matched by bigger areas;
 
-- [ ] there exist a legend with `id="legend"`;
+- [x] there exist a legend with `id="legend"`;
 
-- [ ] the legend needs `rect` elements with `class="legend-item"`;
+- [x] the legend needs `rect` elements with `class="legend-item"`;
 
-- [ ] the legend should at least make use of 2 different fill colors;
+- [x] the legend should at least make use of 2 different fill colors;
 
 - [x] when hovering on each area, a tooltip with `id="tooltip"` is to be displayed with detailed information;
 
@@ -188,4 +188,3 @@ While understandable, this first rough version of the code is certainly a lesson
   // display the data, as modified per the treemap layout 
   console.log(treemap(hierarchy));
 ```
-

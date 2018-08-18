@@ -58,6 +58,7 @@ legend
   .data(moviesCategories)
   .enter()
   .append("rect")
+  .attr("class", "legend-item")
   .attr("width", 50)
   .attr("height", 20)
   .attr("x", (d, i) => i*50)
