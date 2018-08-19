@@ -124,7 +124,9 @@ Considering how the mentioned `d3.treemap()` function could work similarly to `d
 
 As this comparison proved to be wrong, and I struggled a little more to include the treemap layout, I'll try to explain the process as clearly as possible for posterity's sake.
 
-Starting with a bit of set up, the JSON object is retrieved with a call through **fetch** API. THe object is then passed as argument to a function responsible for the data visualization itself.
+**Fetch API**
+
+Starting with a bit of set up, the JSON object is retrieved with a call through _fetch_ API. THe object is then passed as argument to a function responsible for the data visualization itself.
 
 ```JS
 // retrieve the JSON format and pass it in a function responsible to draw the diagram itself
@@ -140,6 +142,8 @@ function drawDiagram(data) {
   console.log(data);
 }
 ```
+
+**d3.treemap()**
 
 With the available JSON format, and as mentioned earlier, passing the data in the mapping function proves to be wrong: 
 
@@ -189,4 +193,51 @@ While understandable, this first rough version of the code is certainly a lesson
   console.log(treemap(hierarchy));
 ```
 
-<!-- TODO: document how the rectangle elements were inclued, as well as the color scale (such a neat scale) -->
+**Tiles**
+
+The data, modified as per the treemap layout, provides a series of nodes. All nodes have a `value` attribute, computed from the individual data points. Additionally, all share four attributes in `node.x0`, `node.y0`, `node.x1`, `node.y1`, detailing the position of the rectangles' edges, as mentioned before. 
+
+The four edge-related attributes 
+
+In order to draw one rectangle for data point, it is necessary to make use of the objects nesting the different movies. One way to  
+
+**Color Scales**
+
+A color scale is included to attach to each movie category a different color. For such a mapping, an ordinal scale detailing a discrete input domain and a discrete output range is necessary.
+
+For the domain, this is represented by an array, nesting the different movie categories. This can be included with an hard-coded values or simply retrieved from the dataset, mapping through the data to keep track of each one of them.
+
+```JS
+const moviesCategories = ["Action", "Drama", "Adventure", "Family", "Animation", "Comedy", "Biography"];
+```
+
+For the range, this is handily provided by a preset, included directly in the `.scaleOrdinal()` function declaration. D3 indeed provides a series of [color sets]() which can be thusly and easily included in an ordinal scale.
+
+```JS
+const colorScale = d3
+  .scaleOrdinal(d3.schemeSet2);
+```
+
+With the given domain, the scale will map each discrete value to a different color.
+
+```JS
+colorScale("Action"); // a color from the set
+```
+
+**Legend**
+
+In the previous projects using D3.js, I have always included the legend _before_ the call to the external data and the rendering of the individual data point. This has the benefit of including a legend _while_ the data is fetched, but has the crucial drawback of being a fixed, hard-coded solution. Indeed, legend values are included separately from the data itself, and if this last one changes, the legend does not adapt.
+
+With this project the legend is included, always in a section of the SVG which is separate from the data visaulization, but in the same function detailing the diagram.
+
+The only minor complication is retrieving an array of unique categories, achieved roughly by mapping through the arrays of movies and filtering out duplicate values:
+
+```JS
+let categoriesArr = movies.map((movie) => movie.data.category);
+// remove duplicates 
+let categories = categoriesArr.filter((category, i) => {
+  if (categoriesArr.slice(0, i).indexOf(category) === -1) {
+    return category;
+  }
+});
+```
