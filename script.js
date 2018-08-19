@@ -144,7 +144,7 @@ function drawDiagram(data) {
     .attr("fill", (d, i) => colorScale(d.data.category));
 
 
-  // based on the retrieved data, include a legend based on the objects' categories
+  // based on the retrieved data, include a legend including the movies' categories
   let categoriesArr = movies.map((movie) => movie.data.category);
   // remove duplicates 
   let categories = categoriesArr.filter((category, i) => {
