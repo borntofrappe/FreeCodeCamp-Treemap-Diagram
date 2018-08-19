@@ -43,42 +43,6 @@ const svgContainer = container
   .append("svg")
   .attr("viewBox", `0 0 ${width + margin.left + margin.right} ${height + margin.top + margin.bottom}`);
 
-// include a legend at the bottom of the SVG element
-const legend = svgContainer
-  .append("g")
-  .attr("id", "legend")
-  .attr("transform", `translate(25, ${height + 35})`);
-
-// include the array with the legends values
-const moviesCategories = ["Action", "Drama", "Adventure", "Family", "Animation", "Comedy", "Biography"];
-
-legend
-  // include one rectangle per legend value, with a different fill color
-  .selectAll("rect")
-  .data(moviesCategories)
-  .enter()
-  .append("rect")
-  .attr("class", "legend-item")
-  .attr("width", 50)
-  .attr("height", 20)
-  .attr("x", (d, i) => i*50)
-  .attr("y", 0)
-  // fill to match the fill color of the tiles
-  .attr("fill", (d, i) => colorScale(d))
-  // opacity to match the default opacity for the same rectangles
-  .attr("opacity", 0.7);
-
-legend
-  // below each legend item, include a text detailing the movie category
-  .selectAll("text")
-  .data(moviesCategories)
-  .enter()
-  .append("text")
-  .attr("x", (d, i) => i*50)
-  .attr("font-size", "0.5rem")
-  .attr("y", 30)
-  .text((d, i) => d);
-
 // define the group element nested inside the SVG, in which to actually plot the map
 const svgCanvas = svgContainer
   .append("g")
@@ -178,4 +142,48 @@ function drawDiagram(data) {
     .attr("y", (d, i) => d.y0 * height)
     // the fill color is determined through the color scale, on the basis of the discrete value representing the movie category
     .attr("fill", (d, i) => colorScale(d.data.category));
+
+
+  // based on the retrieved data, include a legend including the movies' categories
+  let categoriesArr = movies.map((movie) => movie.data.category);
+  // remove duplicates 
+  let categories = categoriesArr.filter((category, i) => {
+    if (categoriesArr.slice(0, i).indexOf(category) === -1) {
+      return category;
+    }
+  });
+  
+  // include a legend at the below the SVG canvas
+  const legend = svgCanvas
+    .append("g")
+    .attr("id", "legend")
+    .attr("transform", `translate(0, ${height + 10})`);
+
+  legend
+    // include one rectangle per legend value, with a different fill color
+    .selectAll("rect")
+    .data(categories)
+    .enter()
+    .append("rect")
+    .attr("class", "legend-item")
+    .attr("width", 50)
+    .attr("height", 20)
+    .attr("x", (d, i) => i*50)
+    .attr("y", 0)
+    // fill to match the fill color of the tiles
+    .attr("fill", (d, i) => colorScale(d))
+    // opacity to match the default opacity for the same rectangles
+    .attr("opacity", 0.7);
+
+  legend
+    // below each legend item, include a text detailing the movie category
+    .selectAll("text")
+    .data(categories)
+    .enter()
+    .append("text")
+    .attr("x", (d, i) => i*50)
+    .attr("font-size", "0.5rem")
+    .attr("y", 30)
+    .text((d, i) => d);
+
 }
