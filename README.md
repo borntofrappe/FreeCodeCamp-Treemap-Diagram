@@ -195,11 +195,37 @@ While understandable, this first rough version of the code is certainly a lesson
 
 **Tiles**
 
-The data, modified as per the treemap layout, provides a series of nodes. All nodes have a `value` attribute, computed from the individual data points. Additionally, all share four attributes in `node.x0`, `node.y0`, `node.x1`, `node.y1`, detailing the position of the rectangles' edges, as mentioned before. 
+The data, modified as per the treemap layout, provides a series of nodes, with the following attributes:
 
-The four edge-related attributes 
+- `value`, computed from the individual data points;
 
-In order to draw one rectangle for data point, it is necessary to make use of the objects nesting the different movies. One way to  
+- `data`, with information related to the name, category, sales metric;
+
+- `node.x0`, `node.y0`, `node.x1`, and `node.y1`, detailing the position of the edges of each tile. 
+
+These last four attributes are used in the visualization, describing the horizontal and vertical coordinates, as well as the width and height of each rectangle element.
+
+First, it is necessary to include one rectangle element for each movie. 
+
+```JS
+let movies = [];
+for(let i = 0; i < treemapLayout.children.length; i++) {
+  // loop through the movies names
+  for(let j = 0; j < treemapLayout.children[i].children.length; j++) {
+    // include each movie in the prescribed array
+    movies.push(treemapLayout.children[i].children[j]);
+  }
+}
+```
+
+Then, the values are included in the mentioned properties. The x and y values represent all a fraction of 1 unit. Together, they indeed total to 1. As the values and their cumulative measure range in the [0-1] range, it is necessary to normalize the interval to the [0, width] and [0, height] ranges.
+
+```JS
+.attr("width", (d, i) => (d.x1 - d.x0) * width)
+.attr("height", (d, i) => (d.y1 - d.y0) * height)
+.attr("x", (d, i) => d.x0 * width)
+.attr("y", (d, i) => d.y0 * height)
+```
 
 **Color Scales**
 
